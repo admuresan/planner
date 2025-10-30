@@ -125,6 +125,10 @@ class Calendar {
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 header.classList.add('weekend');
             }
+            // Add tuesday/thursday classes for specific highlighting
+            if (dayOfWeek === 2 || dayOfWeek === 4) {
+                header.classList.add('tue-thu');
+            }
             
             if (isSameDay(date, today)) {
                 header.classList.add('today');
@@ -155,6 +159,10 @@ class Calendar {
             // Add weekend class for Saturday (6) and Sunday (0)
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 column.classList.add('weekend');
+            }
+            // Add tuesday/thursday classes for specific highlighting
+            if (dayOfWeek === 2 || dayOfWeek === 4) {
+                column.classList.add('tue-thu');
             }
             
             // Add month-start class if this is the first day of a new month
@@ -438,6 +446,10 @@ class Calendar {
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 header.classList.add('weekend');
             }
+            // Add tuesday/thursday classes for specific highlighting
+            if (dayOfWeek === 2 || dayOfWeek === 4) {
+                header.classList.add('tue-thu');
+            }
             
             if (isSameDay(date, today)) {
                 header.classList.add('today');
@@ -468,6 +480,10 @@ class Calendar {
             // Add weekend class for Saturday (6) and Sunday (0)
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 column.classList.add('weekend');
+            }
+            // Add tuesday/thursday classes for specific highlighting
+            if (dayOfWeek === 2 || dayOfWeek === 4) {
+                column.classList.add('tue-thu');
             }
             
             // Add month-start class if this is the first day of a new month

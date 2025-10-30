@@ -85,19 +85,19 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
-    /* Solid light background for odd columns (no transparency) */
-    background-color: #FAFAFA;
+    /* Default background color */
+    background-color: #FFFFFF;
     /* Ensure header stays on top of events */
     position: relative;
     z-index: 1;
 }
 
-/* Alternate headers with solid light blue to match columns */
-.day-header:nth-child(even) {
+/* Tuesday and Thursday highlighting */
+.day-header.tue-thu {
     background-color: #E3F2FD; /* Solid light blue */
 }
 
-/* Weekend highlighting - overrides alternating colors */
+/* Weekend highlighting */
 .day-header.weekend {
     background-color: #E8F5E9 !important; /* Light green for weekends */
 }
@@ -142,16 +142,16 @@
     overflow: hidden;
     padding-top: var(--header-height);
     margin-top: calc(-1 * var(--header-height));
-    /* Solid light background for odd columns matching headers */
-    background-color: #FAFAFA;
+    /* Default background color */
+    background-color: #FFFFFF;
 }
 
-/* Alternate columns with solid light blue matching headers */
-.day-column:nth-child(even) {
+/* Tuesday and Thursday highlighting */
+.day-column.tue-thu {
     background-color: #E3F2FD; /* Solid light blue */
 }
 
-/* Weekend highlighting - overrides alternating colors */
+/* Weekend highlighting */
 .day-column.weekend {
     background-color: #E8F5E9 !important; /* Light green for weekends */
 }
