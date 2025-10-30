@@ -52,3 +52,5 @@ step2) keep a backup of all data in this location, regularly (every 5 minutes) r
 in addition to the update that runs every 5 minutes, anytime you save to data run the reconciliation with backup location in bakcground (only if the option is selected and the folder location defined)
 
 add a button to the lest side fo the day planner that is an update button, if the sync setting is not set grey it out otherwise when the user presses it manually create the backup
+
+since the backup location can be different on different devices and this feature is meant to be used to allow multiple devices to see the same calendar do not save the location like you currently do in the settings, save the backup location in a seperate file that is not backed up
