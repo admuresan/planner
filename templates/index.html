@@ -17,6 +17,7 @@
             <h1>Day Planner</h1>
             <button id="add-event-btn" class="btn btn-primary">+ Add Event</button>
             <button id="manage-categories-btn" class="btn btn-secondary">Manage Categories</button>
+            <button id="settings-btn" class="btn btn-secondary">Settings</button>
         </div>
         <div class="top-bar-center">
             <div class="date-jump">
@@ -34,6 +35,13 @@
     <div class="main-content">
         <!-- Left Sidebar -->
         <div class="left-sidebar">
+            <!-- Sync Button -->
+            <div class="left-sidebar-sync">
+                <button id="manual-sync-btn" class="btn btn-secondary btn-full-width" disabled title="Enable backup/sync in settings">
+                    <span class="sync-icon">⟳</span> Sync Backup
+                </button>
+            </div>
+            
             <!-- Upcoming Events Section -->
             <div class="left-sidebar-section upcoming">
                 <div class="left-sidebar-section-header">Upcoming Events</div>
@@ -188,6 +196,40 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <span class="close" data-modal="settings-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="backup-sync-enabled">
+                        Backup/Sync Data
+                    </label>
+                    <p class="setting-description">Enable automatic backup and synchronization across devices.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="backup-location">Backup Location (Device-Specific)</label>
+                    <div class="backup-location-container">
+                        <input type="text" id="backup-location" placeholder="e.g., /Users/you/Dropbox/planner_backup" disabled>
+                        <button type="button" class="btn btn-small" id="validate-location-btn" disabled>Validate</button>
+                    </div>
+                    <div id="location-status" class="location-status"></div>
+                    <p class="setting-description">⚠️ This location is device-specific. Set it separately on each device to the same shared folder (e.g., Dropbox, iCloud).</p>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal="settings-modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Event Details Sidebar -->
     <div id="event-sidebar" class="sidebar">
         <div class="sidebar-header">
@@ -205,6 +247,7 @@
     <!-- JavaScript -->
     <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
     <script src="{{ url_for('static', filename='js/modals.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
     <script src="{{ url_for('static', filename='js/categories.js') }}"></script>
     <script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/event-crud.js') }}"></script>

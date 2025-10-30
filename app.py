@@ -4,6 +4,7 @@ from flask_cors import CORS
 from config import Config
 from api.events import events_bp
 from api.categories import categories_bp
+from api.settings import settings_bp
 from api import event_storage
 import os
 
@@ -26,6 +27,7 @@ with app.app_context():
 # Register blueprints
 app.register_blueprint(events_bp, url_prefix='/api/events')
 app.register_blueprint(categories_bp, url_prefix='/api/categories')
+app.register_blueprint(settings_bp, url_prefix='/api/settings')
 
 @app.route('/')
 def index():

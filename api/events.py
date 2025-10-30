@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify, request, current_app
 from models.event import Event, Note
 from api import event_storage
+from api.sync_utils import trigger_background_sync
 from datetime import datetime
 
 events_bp = Blueprint('events', __name__)
@@ -74,6 +75,9 @@ def create_event():
     if not event_storage.save_event(event.to_dict()):
         return jsonify({'error': 'Failed to save event'}), 500
     
+    # Trigger background sync
+    trigger_background_sync()
+    
     return jsonify(event.to_dict()), 201
 
 @events_bp.route('/<event_id>', methods=['PUT'])
@@ -107,6 +111,9 @@ def update_event(event_id):
     if not event_storage.save_event(event.to_dict()):
         return jsonify({'error': 'Failed to update event'}), 500
     
+    # Trigger background sync
+    trigger_background_sync()
+    
     return jsonify(event.to_dict()), 200
 
 @events_bp.route('/<event_id>', methods=['DELETE'])
@@ -117,6 +124,9 @@ def delete_event(event_id):
     
     if not event_storage.delete_event(event_id):
         return jsonify({'error': 'Failed to delete event'}), 500
+    
+    # Trigger background sync
+    trigger_background_sync()
     
     return jsonify({'message': 'Event deleted'}), 200
 
@@ -147,6 +157,9 @@ def update_note_status(event_id, note_id):
     # Save updated event
     if not event_storage.save_event(event_data):
         return jsonify({'error': 'Failed to update note'}), 500
+    
+    # Trigger background sync
+    trigger_background_sync()
     
     return jsonify(event_data), 200
 

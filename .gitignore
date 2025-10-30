@@ -30,6 +30,7 @@ instance/
 # Data files
 data/*.json
 data/events/*.json
+data/.backup_location.json  # Device-specific backup location (not synced)
 
 # IDE
 .vscode/

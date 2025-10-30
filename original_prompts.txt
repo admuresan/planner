@@ -35,3 +35,20 @@ when saving data create a multifile saving structure, with events going to their
 as the user scrolls sideways, keep loading more days (including events defined in those days, so as to always keep 2 weeks ahead of whats the user is displaying
 
 when hoevering over a box ont he main display that has no events in it display a plus icon that opens the create event modal and auto populates that space as the start time
+
+
+prompt used to create the sync mechanism:
+
+add a new button at the top after manage categories, call it settings
+
+when you click this a settigns modal opens, we will add to this later so make it it's own files
+
+for now the only setting will be a check box that reads backup/sync data, and a text box thathas the word location in front of it, the text box is greyed out if the box is unchecked and editable if the box is checked
+
+when the box is checked and a location is set here step 1) check that that location exists on the device you are running
+
+step2) keep a backup of all data in this location, regularly (every 5 minutes) run a process that sonsolidates changes, leverage best practices to make sure that when you sync your data you are not overwritting changes made to the file but that those changes are being copied to the local storage in this foldr as well and that changes are merged correctly, use dates and file edit mearkers or whateevr is necesary to acomplish this
+
+in addition to the update that runs every 5 minutes, anytime you save to data run the reconciliation with backup location in bakcground (only if the option is selected and the folder location defined)
+
+add a button to the lest side fo the day planner that is an update button, if the sync setting is not set grey it out otherwise when the user presses it manually create the backup

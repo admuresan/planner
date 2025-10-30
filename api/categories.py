@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request, current_app
 from models.category import Category
 from api.storage import (read_json_file, write_json_file, 
                          find_by_id, remove_by_id, update_by_id)
+from api.sync_utils import trigger_background_sync
 
 categories_bp = Blueprint('categories', __name__)
 
@@ -46,6 +47,9 @@ def create_category():
     if not write_json_file(current_app.config['CATEGORIES_FILE'], categories_data):
         return jsonify({'error': 'Failed to save category'}), 500
     
+    # Trigger background sync
+    trigger_background_sync()
+    
     return jsonify(category.to_dict()), 201
 
 @categories_bp.route('/<category_id>', methods=['PUT'])
@@ -77,6 +81,9 @@ def update_category(category_id):
     if not write_json_file(current_app.config['CATEGORIES_FILE'], categories_data):
         return jsonify({'error': 'Failed to update category'}), 500
     
+    # Trigger background sync
+    trigger_background_sync()
+    
     return jsonify(category.to_dict()), 200
 
 @categories_bp.route('/<category_id>', methods=['DELETE'])
@@ -91,6 +98,9 @@ def delete_category(category_id):
     
     if not write_json_file(current_app.config['CATEGORIES_FILE'], categories_data):
         return jsonify({'error': 'Failed to delete category'}), 500
+    
+    # Trigger background sync
+    trigger_background_sync()
     
     return jsonify({'message': 'Category deleted'}), 200
 

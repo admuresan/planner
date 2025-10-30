@@ -10,6 +10,40 @@
     flex-shrink: 0;
 }
 
+/* Sync Button */
+.left-sidebar-sync {
+    padding: 15px;
+    border-bottom: 2px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.btn-full-width {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.sync-icon {
+    font-size: 18px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+#manual-sync-btn:not(:disabled):hover .sync-icon {
+    transform: rotate(180deg);
+}
+
+#manual-sync-btn.syncing .sync-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 .left-sidebar-section {
     display: flex;
     flex-direction: column;
