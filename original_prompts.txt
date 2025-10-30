@@ -1,0 +1,37 @@
+we are making a new web application
+the back end should be python it should be served up via flask and it should auto update as code alters
+everythign we do should be in modular files and folders to make it easy to debug later
+do not let any file get over say 500 lines
+to launch the usr should run an app.py file in the main directory
+this application will be planner application
+it's main page will be a day planner layout, the left hand side should have times, from midnight to nmidnight
+the top should be dates, load these from a real calendar,
+when a user makes chnages store these locally so that the user can reload the server and keep their events etc including where they were
+by default show 7 days at a time across the screen, and allo the user to scroll in either direction to see more days,
+always pre determine what you need ro display at least 2 weeks ahead and behind what is currently displayed to allow for quick scrolling
+add a section at the top that lets to user jump to desired dates
+if the user has no saved activity or if that activity is in the past, by defualt start with today's date being the first column displayed
+at the top there should be add event button, this opens a modal that allows the user to select when the event starts date and time, and when it ends, these are both required, also required is a event name
+the user cna then optionally add a category, this should be a dropdown of exisitng catorgeories defined globaly, one of the options should be add a category, this opens a diferent modal that creares a category, a category is defined by a name and a colour, event in a catrgoy are displayed as the colour selected for the category, events with no category display as a light grey
+at the top there should also be a manage categories button that opens a modal that allows the user to edit delete and add categories
+in addition to end time start time and category, there is a notes section on the event the there are two types of notes the user cna add, add "note" just adds a richtext box that they can type in paste pictures and leave any writing
+add "to do item" is the same but when saved apears as a checkbox which the user can click to mark as complete
+when displayed events start at the start time and date they start at and end when they end, this may cross days in which case it goes to the bottom of the page and then start at the top of the next column
+the event will display it's name, duration, and any notes  on the main page, each note only displays as a single preview line showing the first few characters (whatever fits given the width) and then ..., split these under two headings, "notes" and "to do", with the coresponding notes being displayed in each
+"to do items" have a checkbox here the user can click to say it is completed, save such changes
+when a user clicks on a event, open a right handed sidebar, this will have the details for the event
+show the main attributes and have endit buttons next to them that allow them all to be changed, whe these are changed update the diasplay on thre main page
+then have a notes section which shows a colapsed version of each note, clickign on it expands it and shows it fully, split regular notes and to do items in different headin sections
+on the main page allow users to resize the length of an even by dragging the top or bottom of the bar this changes the start or end time, also allow users to click and drag events this moves the start time but keeps the duration so it moves the end time by the same amount, when dragiing make the event small and show a shadow of where it is being placed
+if multiple events are at the same time have the event bar take up less than the whole width of the date column it is in , half for 2 events thid for 3 etc, after 3 events instead make the date column scrollable but keep the bars that minimum width of 1/3 of the width of the date column
+the bars should have the same width the whole time, so if an event is 5 hours long and there is another event at the same time in hours 2-4 the whole event takes up half the column
+use a nice but calm colour schem focusing on light green and blue for the accents and lines when makign the ui
+again make sure that functionalities are split up in different files so that they are not overly large and are easy to manage
+for functions that are needed to do the same thing try to move those functions into utilities files and import as necesary
+
+by default launch on port 6001
+when saving data create a multifile saving structure, with events going to their own separate files so that not all events are in a single file making it cumbersome to load after many events are loaded, and only load events that are within the rendering window current week +/- 2 weeks, keep index files of the events by id and start date mapping to the files their main data is kept in to make this possible, make sure to update these when event start dates/end_dates change (edited) 
+
+as the user scrolls sideways, keep loading more days (including events defined in those days, so as to always keep 2 weeks ahead of whats the user is displaying
+
+when hoevering over a box ont he main display that has no events in it display a plus icon that opens the create event modal and auto populates that space as the start time
