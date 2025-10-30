@@ -1,0 +1,235 @@
+/* Calendar-specific styles */
+
+/* Calendar Container */
+.calendar-container {
+    display: flex;
+    height: calc(100vh - var(--top-bar-height));
+    overflow: hidden;
+}
+
+/* Time Column */
+.time-column {
+    width: var(--time-column-width);
+    background-color: var(--surface-color);
+    border-right: 2px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.time-header {
+    height: var(--header-height);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.time-slots {
+    height: calc(100vh - var(--top-bar-height) - var(--header-height));
+    overflow: hidden;
+}
+
+.time-slot {
+    height: var(--hour-height);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 5px;
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+/* Days Container */
+.days-container {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: auto;
+    position: relative;
+}
+
+.days-header {
+    height: var(--header-height);
+    display: flex;
+    background-color: var(--surface-color);
+    border-bottom: 2px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.day-header {
+    min-width: 150px;
+    flex: 1;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+/* Alternate headers with light blue to match columns */
+.day-header:nth-child(even) {
+    background-color: rgba(144, 202, 249, 0.08); /* Light blue tint */
+}
+
+.day-header.today {
+    background-color: var(--secondary-light);
+}
+
+.day-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.day-date {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+/* Days Grid */
+.days-grid {
+    display: flex;
+    position: relative;
+    min-height: calc(24 * var(--hour-height));
+}
+
+.day-column {
+    min-width: 150px;
+    flex: 1;
+    border-right: 1px solid var(--border-color);
+    position: relative;
+}
+
+/* Alternate columns with light blue */
+.day-column:nth-child(even) {
+    background-color: rgba(144, 202, 249, 0.08); /* Light blue tint */
+}
+
+.day-column-inner {
+    position: relative;
+    height: 100%;
+}
+
+/* Quick add - double-click visual feedback */
+.day-column {
+    position: relative;
+    cursor: pointer;
+}
+
+.day-column:active {
+    background-color: rgba(76, 175, 80, 0.02);
+}
+
+.hour-line {
+    position: absolute;
+    width: 100%;
+    height: var(--hour-height);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hour-line.half {
+    border-bottom: 1px dashed var(--border-color);
+    opacity: 0.5;
+}
+
+/* Events */
+.event {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    border-radius: 4px;
+    padding: 4px 6px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+    border-left: 4px solid rgba(0, 0, 0, 0.2);
+}
+
+.event:hover {
+    box-shadow: var(--shadow-large);
+    transform: translateY(-1px);
+}
+
+.event.dragging {
+    opacity: 0.5;
+    z-index: 1000;
+}
+
+.event-shadow {
+    position: absolute;
+    border: 2px dashed var(--primary);
+    background-color: rgba(66, 165, 245, 0.15);
+    border-radius: 6px;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+}
+
+.event-name {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 2px;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.event-duration {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 4px;
+}
+
+.event-notes-preview {
+    font-size: 10px;
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.event-notes-section {
+    margin-top: 2px;
+}
+
+.event-notes-title {
+    font-weight: 600;
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+.event-note-item {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1px;
+}
+
+.event-note-checkbox {
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.event-resize-handle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 8px;
+    cursor: ns-resize;
+    z-index: 10;
+}
+
+.event-resize-handle.top {
+    top: 0;
+}
+
+.event-resize-handle.bottom {
+    bottom: 0;
+}
+
+/* Responsive calendar adjustments */
+@media (max-width: 768px) {
+    .day-column {
+        min-width: 120px;
+    }
+}
+

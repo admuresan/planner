@@ -1,0 +1,175 @@
+/* Left Sidebar Styles */
+
+.left-sidebar {
+    width: 280px;
+    background-color: var(--surface-color);
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.left-sidebar-section {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.left-sidebar-section-header {
+    padding: 15px;
+    background-color: var(--secondary-light);
+    color: #000000;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.left-sidebar-section-content {
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Upcoming Events Section */
+.left-sidebar-section.upcoming {
+    flex: 0 0 auto;
+    max-height: 40%;
+    min-height: 200px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.left-sidebar-event {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.left-sidebar-event:hover {
+    background-color: var(--primary-light);
+    transform: translateX(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.left-sidebar-event-datetime {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.left-sidebar-event-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 4px;
+}
+
+.left-sidebar-event-duration {
+    font-size: 11px;
+    color: var(--text-lighter);
+}
+
+/* To-Dos Section */
+.left-sidebar-section.todos {
+    flex: 1 1 auto;
+    min-height: 300px;
+}
+
+.left-sidebar-todo-date-group {
+    margin-bottom: 15px;
+}
+
+.left-sidebar-todo-date-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+}
+
+.left-sidebar-todo-event-group {
+    margin-bottom: 12px;
+    padding-left: 10px;
+}
+
+.left-sidebar-todo-event-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-color);
+    padding: 6px 8px;
+    background-color: var(--bg-color);
+    border-left: 3px solid var(--secondary);
+    border-radius: 3px;
+    margin-bottom: 6px;
+}
+
+.left-sidebar-todo-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 6px 8px;
+    margin-bottom: 4px;
+    background-color: var(--bg-color);
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+
+.left-sidebar-todo-item:hover {
+    background-color: var(--primary-light);
+}
+
+.left-sidebar-todo-checkbox {
+    margin-right: 8px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.left-sidebar-todo-label {
+    font-size: 12px;
+    color: var(--text-color);
+    cursor: pointer;
+    line-height: 1.4;
+    word-wrap: break-word;
+    flex: 1;
+}
+
+.left-sidebar-todo-label.completed {
+    text-decoration: line-through;
+    color: var(--text-lighter);
+}
+
+/* Loading and empty states */
+.left-sidebar-loading,
+.left-sidebar-empty,
+.left-sidebar-error {
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+.left-sidebar-error {
+    color: var(--danger-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .left-sidebar {
+        width: 240px;
+    }
+}
+
+@media (max-width: 900px) {
+    .left-sidebar {
+        display: none;
+    }
+}
+

@@ -1,0 +1,73 @@
+/* Base styles, CSS variables, and resets */
+
+/* Color Scheme - Light Green and Blue with calm colors */
+:root {
+    --primary-color: #4CAF50;
+    --primary-light: #81C784;
+    --primary-dark: #388E3C;
+    --secondary-color: #42A5F5;
+    --secondary-light: #90CAF9;
+    --secondary-dark: #1976D2;
+    
+    --bg-color: #FAFAFA;
+    --surface-color: #FFFFFF;
+    --border-color: #E0E0E0;
+    --text-color: #333333;
+    --text-light: #757575;
+    --text-lighter: #9E9E9E;
+    
+    --default-event-color: #CCCCCC;
+    --hover-color: #F5F5F5;
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-large: 0 4px 12px rgba(0, 0, 0, 0.15);
+    
+    --time-column-width: 80px;
+    --hour-height: 60px;
+    --header-height: 60px;
+    --top-bar-height: 70px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+.main-content {
+    display: flex;
+    height: calc(100vh - var(--top-bar-height));
+    overflow: hidden;
+}
+
+.calendar-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-lighter);
+}
+
