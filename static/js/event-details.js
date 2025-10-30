@@ -480,6 +480,12 @@ class EventDetails {
         const noteHeader = document.createElement('div');
         noteHeader.className = 'sidebar-note-header';
         
+        // Expand/collapse arrow
+        const arrow = document.createElement('span');
+        arrow.className = 'note-expand-arrow';
+        arrow.textContent = '▶';
+        arrow.title = 'Expand/Collapse';
+        
         const preview = document.createElement('div');
         preview.className = 'note-preview';
         preview.style.flex = '1';
@@ -506,12 +512,22 @@ class EventDetails {
             this.showEditNoteForm(eventId, note, isTodo);
         });
         
+        noteHeader.appendChild(arrow);
         noteHeader.appendChild(preview);
         noteHeader.appendChild(editBtn);
         
         const full = document.createElement('div');
         full.className = 'note-full';
         full.style.display = 'none';
+        
+        // Expand/collapse arrow for expanded view
+        const arrowExpanded = document.createElement('span');
+        arrowExpanded.className = 'note-expand-arrow expanded';
+        arrowExpanded.textContent = '▼';
+        arrowExpanded.title = 'Expand/Collapse';
+        
+        const fullContent = document.createElement('div');
+        fullContent.className = 'note-full-content';
         
         if (isTodo) {
             const checkbox = document.createElement('input');
@@ -522,20 +538,45 @@ class EventDetails {
                 e.stopPropagation();
                 eventCRUD.updateNoteStatus(eventId, note.id, e.target.checked);
             });
-            full.appendChild(checkbox);
+            fullContent.appendChild(checkbox);
         }
         
-        full.appendChild(document.createTextNode(note.content));
+        fullContent.appendChild(document.createTextNode(note.content));
+        
+        const editBtnExpanded = document.createElement('button');
+        editBtnExpanded.className = 'btn btn-small sidebar-note-edit-btn';
+        editBtnExpanded.textContent = 'Edit';
+        editBtnExpanded.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.showEditNoteForm(eventId, note, isTodo);
+        });
+        
+        full.appendChild(arrowExpanded);
+        full.appendChild(fullContent);
+        full.appendChild(editBtnExpanded);
         
         noteEl.appendChild(noteHeader);
         noteEl.appendChild(full);
         
-        // Toggle expand/collapse on clicking the preview
-        preview.addEventListener('click', () => {
+        // Toggle expand/collapse function
+        const toggleExpand = () => {
             const isExpanded = full.style.display !== 'none';
-            full.style.display = isExpanded ? 'none' : 'block';
-            noteHeader.style.display = isExpanded ? 'flex' : 'none';
-        });
+            if (isExpanded) {
+                full.style.display = 'none';
+                noteHeader.style.display = 'flex';
+                arrow.textContent = '▶';
+            } else {
+                full.style.display = 'flex';
+                noteHeader.style.display = 'none';
+                arrowExpanded.textContent = '▼';
+            }
+        };
+        
+        // Add click listeners to both arrows, preview, and full content
+        arrow.addEventListener('click', toggleExpand);
+        arrowExpanded.addEventListener('click', toggleExpand);
+        preview.addEventListener('click', toggleExpand);
+        fullContent.addEventListener('click', toggleExpand);
         
         return noteEl;
     }

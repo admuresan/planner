@@ -101,20 +101,20 @@
 
 /* Sidebar */
 .sidebar {
-    position: fixed;
-    right: -400px;
-    top: 0;
-    width: 400px;
-    height: 100vh;
+    width: 0;
+    height: calc(100vh - var(--top-bar-height));
     background-color: var(--surface-color);
-    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    box-shadow: none;
     z-index: 500;
-    transition: right 0.3s ease;
-    overflow-y: auto;
+    transition: width 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .sidebar.active {
-    right: 0;
+    width: 400px;
+    overflow-y: auto;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar-header {
@@ -125,6 +125,7 @@
     align-items: center;
     background-color: var(--primary-light);
     color: white;
+    min-width: 400px;
 }
 
 .sidebar-header h2 {
@@ -142,6 +143,7 @@
 
 .sidebar-content {
     padding: 20px;
+    min-width: 400px;
 }
 
 .sidebar-section {
@@ -271,6 +273,27 @@
     justify-content: space-between;
 }
 
+.note-expand-arrow {
+    cursor: pointer;
+    user-select: none;
+    font-size: 10px;
+    color: var(--text-light);
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+    width: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.note-expand-arrow:hover {
+    color: var(--primary-color);
+}
+
+.note-expand-arrow.expanded {
+    font-size: 10px;
+}
+
 .sidebar-note-edit-btn {
     flex-shrink: 0;
     padding: 4px 8px !important;
@@ -291,6 +314,19 @@
     font-size: 13px;
     color: var(--text-color);
     white-space: pre-wrap;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.note-full-content {
+    flex: 1;
+    white-space: pre-wrap;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
 }
 
 .sidebar-note-form {
@@ -362,9 +398,8 @@
         gap: 10px;
     }
     
-    .sidebar {
+    .sidebar.active {
         width: 100%;
-        right: -100%;
     }
 }
 
