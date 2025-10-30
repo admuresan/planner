@@ -97,6 +97,11 @@
     background-color: #E3F2FD; /* Solid light blue */
 }
 
+/* Weekend highlighting - overrides alternating colors */
+.day-header.weekend {
+    background-color: #E8F5E9 !important; /* Light green for weekends */
+}
+
 .day-header.today {
     background-color: var(--secondary-light);
 }
@@ -139,6 +144,11 @@
 /* Alternate columns with solid light blue matching headers */
 .day-column:nth-child(even) {
     background-color: #E3F2FD; /* Solid light blue */
+}
+
+/* Weekend highlighting - overrides alternating colors */
+.day-column.weekend {
+    background-color: #E8F5E9 !important; /* Light green for weekends */
 }
 
 .day-column-inner {

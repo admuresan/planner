@@ -117,6 +117,12 @@ class Calendar {
             header.className = 'day-header';
             header.dataset.date = formatDateToInput(date);
             
+            // Add weekend class for Saturday (6) and Sunday (0)
+            const dayOfWeek = date.getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                header.classList.add('weekend');
+            }
+            
             if (isSameDay(date, today)) {
                 header.classList.add('today');
             }
@@ -137,6 +143,11 @@ class Calendar {
             const column = document.createElement('div');
             column.className = 'day-column';
             column.dataset.date = formatDateToInput(date);
+            
+            // Add weekend class for Saturday (6) and Sunday (0)
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                column.classList.add('weekend');
+            }
             
             const inner = document.createElement('div');
             inner.className = 'day-column-inner';
@@ -389,6 +400,12 @@ class Calendar {
             header.className = 'day-header';
             header.dataset.date = formatDateToInput(date);
             
+            // Add weekend class for Saturday (6) and Sunday (0)
+            const dayOfWeek = date.getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                header.classList.add('weekend');
+            }
+            
             if (isSameDay(date, today)) {
                 header.classList.add('today');
             }
@@ -409,6 +426,11 @@ class Calendar {
             const column = document.createElement('div');
             column.className = 'day-column';
             column.dataset.date = formatDateToInput(date);
+            
+            // Add weekend class for Saturday (6) and Sunday (0)
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                column.classList.add('weekend');
+            }
             
             const inner = document.createElement('div');
             inner.className = 'day-column-inner';
