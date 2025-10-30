@@ -240,11 +240,18 @@ class DragManager {
     async handleMouseUp(e) {
         // If we had a potential drag but never moved, treat as click
         if (this.potentialDrag && !this.isDragging && !this.hasMoved) {
-            // This is a click - open the sidebar
+            // This is a click - open the sidebar and navigate to event
             const eventEl = this.potentialDragEvent;
             if (eventEl) {
                 const eventId = eventEl.dataset.eventId;
+                // Show event details first
                 eventDetails.showEventDetails(eventId);
+                // Also scroll to center the event on screen if needed
+                if (calendar && calendar.scrollToEvent) {
+                    await calendar.scrollToEvent(eventId);
+                    // Re-show event details after scrolling in case the view was regenerated
+                    eventDetails.showEventDetails(eventId);
+                }
             }
         }
         

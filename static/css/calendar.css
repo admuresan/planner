@@ -22,7 +22,20 @@
 
 .time-slots {
     height: calc(100vh - var(--top-bar-height) - var(--header-height));
-    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /* Hide scrollbar for cleaner look */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    /* Ensure no padding or margin that could cause misalignment */
+    padding: 0;
+    margin: 0;
+    /* Add bottom padding to match the buffer in the schedule */
+    padding-bottom: calc(100vh - var(--top-bar-height) - var(--header-height));
+}
+
+.time-slots::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .time-slot {
@@ -31,9 +44,16 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 5px;
     font-size: 12px;
     color: var(--text-light);
+    position: relative;
+    flex-shrink: 0; /* Prevent flex compression */
+    box-sizing: border-box; /* Border included in height */
+    /* Remove border from last slot to match hour-lines exactly */
+}
+
+.time-slot:last-child {
+    border-bottom: none; /* Remove border from last slot for exact alignment */
 }
 
 /* Days Container */
@@ -51,7 +71,9 @@
     border-bottom: 2px solid var(--border-color);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 1001; /* Higher than dragging events (1000) to ensure headers stay on top */
+    /* Ensure solid background - no transparency */
+    isolation: isolate;
 }
 
 .day-header {
@@ -63,11 +85,16 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
+    /* Solid light background for odd columns (no transparency) */
+    background-color: #FAFAFA;
+    /* Ensure header stays on top of events */
+    position: relative;
+    z-index: 1;
 }
 
-/* Alternate headers with light blue to match columns */
+/* Alternate headers with solid light blue to match columns */
 .day-header:nth-child(even) {
-    background-color: rgba(144, 202, 249, 0.08); /* Light blue tint */
+    background-color: #E3F2FD; /* Solid light blue */
 }
 
 .day-header.today {
@@ -91,6 +118,9 @@
     display: flex;
     position: relative;
     min-height: calc(24 * var(--hour-height));
+    /* Ensure no padding or margin that could cause misalignment */
+    padding: 0;
+    margin: 0;
 }
 
 .day-column {
@@ -98,11 +128,17 @@
     flex: 1;
     border-right: 1px solid var(--border-color);
     position: relative;
+    /* Prevent events from rendering in header space */
+    overflow: hidden;
+    padding-top: var(--header-height);
+    margin-top: calc(-1 * var(--header-height));
+    /* Solid light background for odd columns matching headers */
+    background-color: #FAFAFA;
 }
 
-/* Alternate columns with light blue */
+/* Alternate columns with solid light blue matching headers */
 .day-column:nth-child(even) {
-    background-color: rgba(144, 202, 249, 0.08); /* Light blue tint */
+    background-color: #E3F2FD; /* Solid light blue */
 }
 
 .day-column-inner {
@@ -125,6 +161,7 @@
     width: 100%;
     height: var(--hour-height);
     border-bottom: 1px solid var(--border-color);
+    box-sizing: border-box; /* Ensure consistent box model */
 }
 
 .hour-line.half {

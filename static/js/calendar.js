@@ -27,7 +27,7 @@ class Calendar {
         this.determineStartDate();
         this.generateDates();
         this.renderDays();
-        this.scrollToToday();
+        this.restoreScrollPosition();
         this.setupScrollDetection();
     }
 
@@ -60,21 +60,8 @@ class Calendar {
         
         if (savedDate) {
             const date = new Date(savedDate);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            // If saved date is in the past (before today), use today instead
-            if (date < today) {
-                console.log('Saved date is in the past, using today instead');
-                const offsetDays = Math.floor(this.visibleDays / 2);
-                this.currentStartDate = new Date(today);
-                this.currentStartDate.setDate(this.currentStartDate.getDate() - offsetDays);
-                // Save the new position
-                localStorage.setItem('calendarStartDate', this.currentStartDate.toISOString());
-                return;
-            }
-            
-            // Use saved date if it's today or in the future
+            // Use saved date regardless of whether it's in the past
+            // This allows users to view historical events
             this.currentStartDate = date;
             console.log('Loaded saved calendar position:', date);
             return;
@@ -168,7 +155,7 @@ class Calendar {
     }
 
     /**
-     * Scroll to today's date (centered)
+     * Scroll to today's date (centered horizontally, starting at 8 AM vertically)
      */
     scrollToToday() {
         const today = new Date();
@@ -178,6 +165,82 @@ class Calendar {
         const todayHeader = this.daysHeader.querySelector(`[data-date="${todayStr}"]`);
         if (todayHeader) {
             this.scrollToDate(todayHeader, true);
+            // Scroll to 8 AM (8 hours * 60 pixels per hour = 480px)
+            setTimeout(() => {
+                this.daysContainer.scrollTop = 480;
+                this.timeSlots.scrollTop = 480;
+            }, 100);
+        }
+    }
+
+    /**
+     * Restore scroll position from localStorage or scroll to today at 8 AM
+     */
+    restoreScrollPosition() {
+        const savedCenterDate = localStorage.getItem('calendarCenterDate');
+        const savedScrollTop = localStorage.getItem('calendarScrollTop');
+        
+        if (savedCenterDate && savedScrollTop !== null) {
+            // Parse the saved center date
+            const parts = savedCenterDate.split('-');
+            const centerDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            
+            // Use setTimeout to ensure DOM is fully rendered
+            setTimeout(() => {
+                // Find the column for the center date
+                const dateHeader = this.daysHeader.querySelector(`[data-date="${savedCenterDate}"]`);
+                if (dateHeader) {
+                    // Calculate scroll position to center this date
+                    const containerWidth = this.daysContainer.clientWidth;
+                    const headerLeft = dateHeader.offsetLeft;
+                    const headerWidth = dateHeader.offsetWidth;
+                    const scrollLeft = headerLeft - (containerWidth / 2) + (headerWidth / 2);
+                    
+                    // Restore both horizontal and vertical scroll
+                    this.daysContainer.scrollLeft = Math.max(0, scrollLeft);
+                    this.daysContainer.scrollTop = parseFloat(savedScrollTop);
+                    this.timeSlots.scrollTop = parseFloat(savedScrollTop);
+                    
+                    console.log('Restored to center date:', savedCenterDate, { 
+                        scrollLeft: scrollLeft, 
+                        scrollTop: savedScrollTop 
+                    });
+                } else {
+                    // Date not found, fall back to pixel position with default 8 AM start
+                    const savedScrollLeft = localStorage.getItem('calendarScrollLeft');
+                    if (savedScrollLeft !== null) {
+                        this.daysContainer.scrollLeft = parseFloat(savedScrollLeft);
+                        this.daysContainer.scrollTop = parseFloat(savedScrollTop);
+                        this.timeSlots.scrollTop = parseFloat(savedScrollTop);
+                    } else {
+                        // Default to 8 AM if no saved position
+                        this.scrollToToday();
+                    }
+                }
+            }, 0);
+        } else {
+            // No saved position, scroll to today at 8 AM
+            this.scrollToToday();
+        }
+    }
+
+    /**
+     * Save current scroll position to localStorage
+     */
+    saveScrollPosition() {
+        // Save pixel positions as fallback
+        localStorage.setItem('calendarScrollLeft', this.daysContainer.scrollLeft.toString());
+        localStorage.setItem('calendarScrollTop', this.daysContainer.scrollTop.toString());
+        
+        // Save the center date for more accurate restoration
+        const visibleColumns = this.getVisibleDateColumns();
+        if (visibleColumns.length > 0) {
+            const centerColumn = visibleColumns[Math.floor(visibleColumns.length / 2)];
+            const centerDateStr = centerColumn.dataset.date;
+            if (centerDateStr) {
+                localStorage.setItem('calendarCenterDate', centerDateStr);
+                console.log('Saved center date:', centerDateStr);
+            }
         }
     }
 
@@ -185,9 +248,16 @@ class Calendar {
      * Set up scroll detection for infinite scrolling
      */
     setupScrollDetection() {
+        // Sync vertical scroll between days container and time slots
+        this.daysContainer.addEventListener('scroll', () => {
+            this.timeSlots.scrollTop = this.daysContainer.scrollTop;
+        });
+        
+        // Handle horizontal scroll and date loading (debounced)
         this.daysContainer.addEventListener('scroll', debounce(() => {
             this.handleScroll();
             this.saveCurrentVisibleDate();
+            this.saveScrollPosition();
         }, 150));
     }
 
@@ -399,6 +469,12 @@ class Calendar {
         const dateHeader = this.daysHeader.querySelector(`[data-date="${dateStr}"]`);
         if (dateHeader) {
             this.scrollToDate(dateHeader, center);
+            // Scroll to 8 AM by default (8 hours * 60 pixels per hour = 480px)
+            setTimeout(() => {
+                this.daysContainer.scrollTop = 480;
+                this.timeSlots.scrollTop = 480;
+                this.saveScrollPosition();
+            }, 100);
         }
     }
     
@@ -422,6 +498,10 @@ class Calendar {
         }
         
         this.daysContainer.scrollLeft = Math.max(0, scrollLeft);
+        // Save scroll position after programmatic scrolling
+        setTimeout(() => {
+            this.saveScrollPosition();
+        }, 100);
     }
 
     /**
@@ -538,6 +618,109 @@ class Calendar {
             start: new Date(this.loadedDateRange.start),
             end: new Date(this.loadedDateRange.end)
         };
+    }
+
+    /**
+     * Scroll to center an event both horizontally (date) and vertically (time)
+     * @param {Object|string} eventOrId - Event object or event ID
+     */
+    async scrollToEvent(eventOrId) {
+        // Get the event object if only ID provided
+        let event;
+        if (typeof eventOrId === 'string') {
+            // Find event in event manager
+            if (window.eventManager && window.eventManager.events) {
+                event = window.eventManager.events.find(e => e.id === eventOrId);
+            }
+        } else {
+            event = eventOrId;
+        }
+
+        if (!event) {
+            console.warn('Event not found for scrolling');
+            return;
+        }
+
+        const startDate = parseISODate(event.start_time);
+        const endDate = parseISODate(event.end_time);
+        
+        // Calculate the start and end positions of the event
+        const startYPos = this.calculateYPosition(startDate);
+        const endYPos = this.calculateYPosition(endDate);
+
+        // First, ensure the date is loaded and in view
+        const dateStr = formatDateToInput(startDate);
+        let dateColumn = this.getColumnForDate(startDate);
+
+        // If the date isn't loaded yet, jump to it first
+        if (!dateColumn) {
+            await this.jumpToDate(startDate, true);
+            dateColumn = this.getColumnForDate(startDate);
+        }
+
+        if (!dateColumn) {
+            console.warn('Could not find column for date:', dateStr);
+            return;
+        }
+
+        // Check if event is already visible in viewport
+        const containerRect = this.daysContainer.getBoundingClientRect();
+        const columnRect = dateColumn.getBoundingClientRect();
+        
+        // Get current scroll positions
+        const currentScrollLeft = this.daysContainer.scrollLeft;
+        const currentScrollTop = this.daysContainer.scrollTop;
+        
+        // Calculate event's position relative to viewport
+        const eventLeftInViewport = columnRect.left - containerRect.left;
+        const eventRightInViewport = columnRect.right - containerRect.left;
+        const eventTopInViewport = startYPos - currentScrollTop;
+        const eventBottomInViewport = endYPos - currentScrollTop;
+        
+        // Check if event is fully visible (with some margin for comfort)
+        const margin = 50; // 50px margin on all sides
+        const isHorizontallyVisible = eventLeftInViewport >= margin && 
+                                       eventRightInViewport <= (containerRect.width - margin);
+        const isVerticallyVisible = eventTopInViewport >= margin && 
+                                     eventBottomInViewport <= (containerRect.height - margin);
+        
+        // If event is already fully visible, don't scroll
+        if (isHorizontallyVisible && isVerticallyVisible) {
+            console.log('Event already visible, not scrolling');
+            return;
+        }
+
+        // Event is not fully visible, scroll to center it
+        const middleTime = new Date((startDate.getTime() + endDate.getTime()) / 2);
+        const middleYPos = this.calculateYPosition(middleTime);
+        
+        // Calculate horizontal position (date-based)
+        const containerWidth = this.daysContainer.clientWidth;
+        const columnLeft = dateColumn.offsetLeft;
+        const columnWidth = dateColumn.offsetWidth;
+        
+        // Center the date horizontally
+        const scrollLeft = columnLeft - (containerWidth / 2) + (columnWidth / 2);
+        
+        // Center the event time vertically
+        const containerHeight = this.daysContainer.clientHeight;
+        const scrollTop = middleYPos - (containerHeight / 2);
+
+        // Smooth scroll to the position
+        this.daysContainer.scrollTo({
+            left: Math.max(0, scrollLeft),
+            top: Math.max(0, scrollTop),
+            behavior: 'smooth'
+        });
+
+        // The scroll event listener will automatically sync time slots,
+        // but we also set it directly for immediate feedback
+        this.timeSlots.scrollTop = Math.max(0, scrollTop);
+
+        // Save the new position after scrolling completes
+        setTimeout(() => {
+            this.saveScrollPosition();
+        }, 500); // Wait for smooth scroll animation
     }
 }
 

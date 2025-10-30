@@ -127,24 +127,26 @@ class LeftSidebar {
         eventEl.appendChild(durationEl);
 
         // Click to show details
-        eventEl.addEventListener('click', () => {
+        eventEl.addEventListener('click', async () => {
+            // Show event details first
             eventDetails.showEventDetails(event.id);
-            // Scroll to center the event in the calendar
-            this.scrollToEvent(event);
+            // Then scroll to center the event in the calendar
+            await this.scrollToEvent(event);
+            // Re-show event details after scrolling in case the view was regenerated
+            eventDetails.showEventDetails(event.id);
         });
 
         return eventEl;
     }
 
     /**
-     * Scroll to an event in the calendar (centered)
+     * Scroll to an event in the calendar (centered both horizontally and vertically)
      * @param {Object} event - Event data
      */
-    scrollToEvent(event) {
-        const startDate = parseISODate(event.start_time);
-        if (calendar && calendar.jumpToDate) {
-            // Pass true to center the date in view
-            calendar.jumpToDate(startDate, true);
+    async scrollToEvent(event) {
+        if (calendar && calendar.scrollToEvent) {
+            // Use the new scrollToEvent method which centers both date and time
+            await calendar.scrollToEvent(event);
         }
     }
 
