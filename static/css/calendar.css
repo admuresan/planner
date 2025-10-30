@@ -106,6 +106,11 @@
     background-color: var(--secondary-light);
 }
 
+/* Bold line for month boundaries */
+.day-header.month-start {
+    border-left: 4px solid #333;
+}
+
 .day-name {
     font-size: 14px;
     font-weight: 600;
@@ -149,6 +154,11 @@
 /* Weekend highlighting - overrides alternating colors */
 .day-column.weekend {
     background-color: #E8F5E9 !important; /* Light green for weekends */
+}
+
+/* Bold line for month boundaries */
+.day-column.month-start {
+    border-left: 4px solid #333;
 }
 
 .day-column-inner {

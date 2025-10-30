@@ -112,6 +112,9 @@ class Calendar {
         today.setHours(0, 0, 0, 0);
         
         this.allDates.forEach((date, index) => {
+            // Check if this is the start of a new month
+            const isMonthStart = index > 0 && this.allDates[index - 1].getMonth() !== date.getMonth();
+            
             // Render header
             const header = document.createElement('div');
             header.className = 'day-header';
@@ -125,6 +128,11 @@ class Calendar {
             
             if (isSameDay(date, today)) {
                 header.classList.add('today');
+            }
+            
+            // Add month-start class if this is the first day of a new month
+            if (isMonthStart) {
+                header.classList.add('month-start');
             }
             
             const dayName = document.createElement('div');
@@ -147,6 +155,11 @@ class Calendar {
             // Add weekend class for Saturday (6) and Sunday (0)
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 column.classList.add('weekend');
+            }
+            
+            // Add month-start class if this is the first day of a new month
+            if (isMonthStart) {
+                column.classList.add('month-start');
             }
             
             const inner = document.createElement('div');
@@ -394,7 +407,27 @@ class Calendar {
         const headerFragment = document.createDocumentFragment();
         const gridFragment = document.createDocumentFragment();
         
-        dates.forEach(date => {
+        dates.forEach((date, index) => {
+            // Check if this is the start of a new month
+            let isMonthStart = false;
+            if (method === 'append') {
+                // For append, check against the last date in allDates before these new ones
+                if (index === 0 && this.allDates.length > dates.length) {
+                    const lastExistingDate = this.allDates[this.allDates.length - dates.length - 1];
+                    isMonthStart = lastExistingDate.getMonth() !== date.getMonth();
+                } else if (index > 0) {
+                    isMonthStart = dates[index - 1].getMonth() !== date.getMonth();
+                }
+            } else {
+                // For prepend, check against the first date in allDates after these new ones
+                if (index === dates.length - 1 && this.allDates.length > dates.length) {
+                    const firstExistingDate = this.allDates[dates.length];
+                    isMonthStart = date.getMonth() !== firstExistingDate.getMonth();
+                } else if (index < dates.length - 1) {
+                    isMonthStart = date.getMonth() !== dates[index + 1].getMonth();
+                }
+            }
+            
             // Create header
             const header = document.createElement('div');
             header.className = 'day-header';
@@ -408,6 +441,11 @@ class Calendar {
             
             if (isSameDay(date, today)) {
                 header.classList.add('today');
+            }
+            
+            // Add month-start class if this is the first day of a new month
+            if (isMonthStart) {
+                header.classList.add('month-start');
             }
             
             const dayName = document.createElement('div');
@@ -430,6 +468,11 @@ class Calendar {
             // Add weekend class for Saturday (6) and Sunday (0)
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 column.classList.add('weekend');
+            }
+            
+            // Add month-start class if this is the first day of a new month
+            if (isMonthStart) {
+                column.classList.add('month-start');
             }
             
             const inner = document.createElement('div');
